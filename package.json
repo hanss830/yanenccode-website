@@ -1,0 +1,7 @@
+{
+  "name": "obfuscator-yan",
+  "version": "1.0.0",
+  "dependencies": {
+    "javascript-obfuscator": "^4.0.2"
+  }
+}
