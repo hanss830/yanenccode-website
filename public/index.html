@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>YanOfficialID JS Obfuscator</title>
+<style>
+    body {
+        background: black;
+        color: #00ff44;
+        font-family: monospace;
+        text-align: center;
+        padding: 50px;
+    }
+    textarea {
+        width: 80%;
+        height: 150px;
+        background: #111;
+        color: #00ff44;
+        border: 1px solid #00ff44;
+        padding: 10px;
+        margin: 10px 0;
+    }
+    button {
+        background: #00ff44;
+        color: black;
+        border: none;
+        padding: 10px 20px;
+        font-weight: bold;
+        cursor: pointer;
+        border-radius: 5px;
+        box-shadow: 0 0 10px #00ff44;
+    }
+</style>
+</head>
+<body>
+
+<h2>YanOfficialID</h2>
+
+<textarea id="kodeInput" placeholder="Tempel kode JS kamu di sini..."></textarea><br>
+<button onclick="obfuscate()">[ Obfuscate Sekarang ]</button>
+<p id="status"></p>
+<pre id="loadingBar" style="color:#00ff44;"></pre>
+<textarea id="hasilOutput" placeholder="Hasil obfuscate muncul di sini..." readonly></textarea>
+
+<script>
+async function obfuscate() {
+    const kode = document.getElementById('kodeInput').value;
+    if (!kode.trim()) return alert("Tempel kode dulu!");
+
+    const status = document.getElementById('status');
+    const loading = document.getElementById('loadingBar');
+    const hasilOutput = document.getElementById('hasilOutput');
+    hasilOutput.value = '';
+    status.innerText = 'Memulai proses...';
+
+    const stages = [
+        '█▒▒▒▒▒▒▒▒▒ 10%',
+        '████▒▒▒▒▒▒ 30%',
+        '█████▒▒▒▒▒ 50%',
+        '████████▒▒ 80%',
+        '██████████ 100%'
+    ];
+
+    for (let i = 0; i < stages.length; i++) {
+        loading.innerText = stages.slice(0, i + 1).join('\n');
+        await new Promise(r => setTimeout(r, 500));
+    }
+
+    status.innerText = 'Mengirim ke server...';
+
+    const res = await fetch('/api/obfuscate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain' },
+        body: kode
+    });
+
+    if (res.ok) {
+        const hasil = await res.text();
+        hasilOutput.value = hasil;
+        status.innerText = '✅ Selesai!';
+    } else {
+        status.innerText = '❌ Terjadi error saat proses';
+    }
+}
+</script>
+
+</body>
+  </html>
